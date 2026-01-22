@@ -1,0 +1,78 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Align = alCustom
+  AutoSize = True
+  Caption = 'Form1'
+  ClientHeight = 197
+  ClientWidth = 964
+  Color = clTeal
+  DoubleBuffered = True
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  WindowState = wsMaximized
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 0
+    Top = 0
+    Width = 48
+    Height = 21
+    Caption = 'Label1'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clYellow
+    Font.Height = -17
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 0
+    Top = 27
+    Width = 48
+    Height = 21
+    Caption = 'Label1'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clYellow
+    Font.Height = -17
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object button1: TButton
+    Left = 808
+    Top = 24
+    Width = 75
+    Height = 25
+    Caption = 'redlines'
+    TabOrder = 0
+    OnClick = button1Click
+  end
+  object Button2: TButton
+    Left = 889
+    Top = 24
+    Width = 75
+    Height = 25
+    Caption = 'tiles'
+    TabOrder = 1
+    OnClick = Button2Click
+  end
+  object Button3: TButton
+    Left = 727
+    Top = 24
+    Width = 75
+    Height = 25
+    Caption = 'Button3'
+    TabOrder = 2
+    OnClick = Button3Click
+  end
+  object BalloonHint1: TBalloonHint
+    Left = 312
+    Top = 40
+  end
+end

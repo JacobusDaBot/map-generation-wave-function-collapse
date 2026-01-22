@@ -1,0 +1,438 @@
+unit Unit1;
+
+interface
+
+uses
+ Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls,math, Vcl.StdCtrls,vcl.Imaging.pngimage,
+  Vcl.CheckLst, Vcl.ComCtrls ;
+
+type
+  TForm1 = class(TForm)
+    button1: TButton;
+    Button2: TButton;
+    Label1: TLabel;
+    BalloonHint1: TBalloonHint;
+
+    procedure tilehomefloor();
+    procedure button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    allfloor: array of array of Timage;
+    allfloormap: array of array of char;
+    allfloormap2: array of array of string;
+  end;
+
+var
+  Form1: TForm1;
+
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.button1Click(Sender: TObject);
+begin
+tilehomefloor();
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+var x,y,i , divfactor ,repeatclean: integer;
+begin
+repeatclean:=4;
+divfactor:=48;
+Setlength(allfloor,round(form1.width/divfactor));
+Setlength(allfloormap,round(form1.width/divfactor));
+
+
+for X := 1 to round(form1.Width/divfactor-1) do
+  begin
+  Setlength(allfloor[x],round(form1.HEIGHT/divfactor));
+  Setlength(allfloormap[x],round(form1.HEIGHT/divfactor));
+    for Y := 1 to round(form1.HEIGHT/divfactor-1) do
+    begin
+      begin
+      allfloor[x][y] := TImage.Create(Self);
+        if (X =1)and (y =1) then allfloormap[x][y]:= 'W'
+        else
+        if (X =1) and (allfloormap[x][y-1]=('G'))  then
+        begin
+          case randomrange(1,4) of
+          1:allfloormap[x][y]:='G';
+          2:allfloormap[x][y]:='S';
+          3:allfloormap[x][y]:='F';
+          end;
+        end
+        else
+        if (X =1) and (allfloormap[x][y-1]=('S'))  then
+        begin
+          case randomrange(1,4) of
+          1:allfloormap[x][y]:='G';
+          2:allfloormap[x][y]:='S';
+          3:allfloormap[x][y]:='W';
+          end;
+        end
+        else
+        if (X =1) and (allfloormap[x][y-1]=('W'))  then
+        begin
+          case randomrange(1,3) of
+          1:allfloormap[x][y]:='W';
+          2:allfloormap[x][y]:='S';
+          end;
+        end
+        else
+        if (X =1) and (allfloormap[x][y-1]=('F'))  then
+        begin
+          case randomrange(1,3) of
+          1:allfloormap[x][y]:='F';
+          2:allfloormap[x][y]:='G';
+          end;
+        end
+        else
+        if (Y =1) and (allfloormap[x-1][y]=('G'))  then
+        begin
+          case randomrange(1,4) of
+          1:allfloormap[x][y]:='G';
+          2:allfloormap[x][y]:='S';
+          3:allfloormap[x][y]:='F';
+          end;
+        end
+        else
+        if (Y =1) and (allfloormap[x-1][y]=('S'))  then
+        begin
+          case randomrange(1,4) of
+          1:allfloormap[x][y]:='G';
+          2:allfloormap[x][y]:='S';
+          3:allfloormap[x][y]:='W';
+          end;
+        end
+        else
+        if (Y =1) and (allfloormap[x-1][y]=('W'))  then
+        begin
+          case randomrange(1,3) of
+          1:allfloormap[x][y]:='W';
+          2:allfloormap[x][y]:='S';
+          end;
+        end
+        else
+        if (Y =1) and (allfloormap[x-1][y]=('F'))  then
+        begin
+          case randomrange(1,3) of
+          1:allfloormap[x][y]:='F';
+          2:allfloormap[x][y]:='G';
+          end;
+        end
+        else
+        if ((allfloormap[x-1][y]='G')and(allfloormap[x][y-1]='F')) or
+           ((allfloormap[x-1][y]='F')and(allfloormap[x][y-1]='G'))or
+           ((allfloormap[x-1][y]='F')and(allfloormap[x][y-1]='F'))then
+        begin
+          case randomrange(1,3) of
+          1:allfloormap[x][y]:='F';
+          2:allfloormap[x][y]:='G';
+          end;
+        end
+        else
+        if ((allfloormap[x-1][y]='G')and(allfloormap[x][y-1]='S')) or
+           ((allfloormap[x-1][y]='S')and(allfloormap[x][y-1]='G')) then
+        begin
+          case randomrange(1,3) of
+          1:allfloormap[x][y]:='S';
+          2:allfloormap[x][y]:='G';
+          end;
+        end
+        else
+        if ((allfloormap[x-1][y]='W')and(allfloormap[x][y-1]='S'))or
+           ((allfloormap[x-1][y]='S')and(allfloormap[x][y-1]='W'))or
+           ((allfloormap[x-1][y]='W')and(allfloormap[x][y-1]='W'))then
+        begin
+          case randomrange(1,4) of
+          1:allfloormap[x][y]:='S';
+          2..3:allfloormap[x][y]:='W';
+          end;
+        end
+        else
+        if ((allfloormap[x-1][y]='W')and(allfloormap[x][y-1]='G')) or
+           ((allfloormap[x-1][y]='G')and(allfloormap[x][y-1]='W'))then
+        begin
+         allfloormap[x][y]:='S';
+        end
+        else
+        if ((allfloormap[x-1][y]='S')and(allfloormap[x][y-1]='F')) or
+           ((allfloormap[x-1][y]='F')and(allfloormap[x][y-1]='S'))then
+        begin
+         allfloormap[x][y]:='G';
+        end
+        else
+        if ((allfloormap[x-1][y]='G')and(allfloormap[x][y-1]='G')) then
+        begin
+          case randomrange(1,4) of
+          1:allfloormap[x][y]:='S';
+          2:allfloormap[x][y]:='G';
+          3:allfloormap[x][y]:='F';
+          end;
+        end
+        else
+        if ((allfloormap[x-1][y]='S')and(allfloormap[x][y-1]='S')) then
+        begin
+          case randomrange(1,9) of
+          4:allfloormap[x][y]:='S';
+          1..3:allfloormap[x][y]:='G';
+          5..8:allfloormap[x][y]:='W';
+          end;
+        end
+       else
+       begin
+       allfloormap[x][y]:='N';
+       end;
+
+       case allfloormap[x][y] of
+       'S':allfloor[x][y].Hint:='Sand';
+       'W':allfloor[x][y].Hint:='Water';
+       'G':allfloor[x][y].Hint:='Grass';
+       'F':allfloor[x][y].Hint:='Flowers';
+       end;
+
+      allfloor[x][y].CustomHint:= BalloonHint1;
+      allfloor[x][y].Picture.LoadFromFile('terrain/'+allfloormap[x][y]+'.png');
+
+
+      allfloor[x][y].Width:=divfactor;
+      allfloor[x][y].height:=divfactor;
+      allfloor[x][y].Stretch:=true;
+      allfloor[x][y].top:=y*divfactor;
+      allfloor[x][y].left:=x*divfactor;
+      allfloor[x][y].Parent:= form1;
+      allfloor[x][y].SendToBack;
+      allfloor[x][y].Enabled:= false;
+      form1.Repaint;
+      label1.Caption:=x.ToString+#9+y.ToString;
+      end;
+    end;
+  end;
+  //showmessage('done 1');
+
+for i := 0 to repeatclean do
+begin
+for X := 1 to round(form1.Width/divfactor-1) do
+  begin
+    for Y := 1 to round(form1.height/divfactor-1) do
+    begin
+    if (x<>1)and(Y<>1)and((x<>round(form1.Width/divfactor-1))and(Y<>round(form1.height/divfactor-1))) then
+      begin
+      if (allfloormap[X][Y]='S') then
+        begin
+        if ((allfloormap[x][y+1]='W')and(allfloormap[x][y-1]='W')and(allfloormap[x-1][y]='W')and(allfloormap[x+1][y]='W'))or
+           ((allfloormap[x][y+1]='W')and(allfloormap[x][y-1]='W')and(allfloormap[x-1][y]='W')and(allfloormap[x+1][y]='S')) or  //R
+           ((allfloormap[x+1][y]='W')and(allfloormap[x][y-1]='W')and(allfloormap[x-1][y]='W')and(allfloormap[x][y+1]='S')) or  //B
+           ((allfloormap[x+1][y]='W')and(allfloormap[x][y+1]='W')and(allfloormap[x-1][y]='W')and(allfloormap[x][y-1]='S'))or  //T
+           ((allfloormap[x+1][y]='W')and(allfloormap[x][y-1]='W')and(allfloormap[x][y+1]='W')and(allfloormap[x-1][y]='S'))then//l
+          BEGIN
+          //allfloor[x][y].Enabled:= true;
+          allfloor[x][y].Picture.LoadFromFile('terrain/W.png');
+          //allfloor[x][y].Enabled:= false;
+          form1.Repaint;
+          END
+        else
+        if ((allfloormap[x][y+1]='G')and(allfloormap[x][y-1]='G')and(allfloormap[x-1][y]='G')and(allfloormap[x+1][y]='G'))or
+           ((allfloormap[x][y+1]='G')and(allfloormap[x][y-1]='G')and(allfloormap[x-1][y]='G')and(allfloormap[x+1][y]='S'))or  //R
+           ((allfloormap[x+1][y]='G')and(allfloormap[x][y-1]='G')and(allfloormap[x-1][y]='G')and(allfloormap[x][y+1]='S'))or  //B
+           ((allfloormap[x+1][y]='G')and(allfloormap[x][y+1]='G')and(allfloormap[x-1][y]='G')and(allfloormap[x][y-1]='S'))or  //T
+           ((allfloormap[x+1][y]='G')and(allfloormap[x][y-1]='G')and(allfloormap[x][y+1]='G')and(allfloormap[x-1][y]='S'))then//l
+          BEGIN
+          //allfloor[x][y].Enabled:= true;
+          allfloor[x][y].Picture.LoadFromFile('terrain/G.png');
+          //allfloor[x][y].Enabled:= false;
+          form1.Repaint;
+          END;
+
+
+
+
+
+        end;
+      end
+      else
+      if (x=1)and(Y<>1) and (allfloormap[X][Y]='S') then
+      begin
+      if  ((allfloormap[x+1][y]='G')and(allfloormap[x][y-1]='S')and(allfloormap[x][y+1]='G'))or  //R
+          ((allfloormap[x+1][y]='S')and(allfloormap[x][y-1]='G')and(allfloormap[x][y+1]='G'))or  //B
+          ((allfloormap[x+1][y]='G')and(allfloormap[x][y-1]='G')and(allfloormap[x][y+1]='S'))or  //B
+          ((allfloormap[x+1][y]='G')and(allfloormap[x][y-1]='G')and(allfloormap[x][y+1]='G'))then
+          BEGIN
+          //allfloor[x][y].Enabled:= true;
+          allfloor[x][y].Picture.LoadFromFile('terrain/G.png');
+          //allfloor[x][y].Enabled:= false;
+          END
+      ELSE
+      if  ((allfloormap[x+1][y]='W')and(allfloormap[x][y-1]='S')and(allfloormap[x][y+1]='W'))or  //R
+          ((allfloormap[x+1][y]='S')and(allfloormap[x][y-1]='W')and(allfloormap[x][y+1]='W'))or  //B
+          ((allfloormap[x+1][y]='W')and(allfloormap[x][y-1]='W')and(allfloormap[x][y+1]='S'))or  //B
+          ((allfloormap[x+1][y]='W')and(allfloormap[x][y-1]='W')and(allfloormap[x][y+1]='W'))then
+          BEGIN
+          //allfloor[x][y].Enabled:= true;
+          allfloor[x][y].Picture.LoadFromFile('terrain/w.png');
+          //allfloor[x][y].Enabled:= false;
+          END
+      end;
+      if (x<>1)and(Y=1) and (allfloormap[X][Y]='S') then
+      begin
+      if  ((allfloormap[x+1][y]='G')and(allfloormap[x-1][y]='S')and(allfloormap[x][y+1]='G'))or  //R
+          ((allfloormap[x+1][y]='S')and(allfloormap[x-1][y]='G')and(allfloormap[x][y+1]='G'))or  //B
+          ((allfloormap[x+1][y]='G')and(allfloormap[x-1][y]='G')and(allfloormap[x][y+1]='S'))or  //B
+          ((allfloormap[x+1][y]='G')and(allfloormap[x-1][y]='G')and(allfloormap[x][y+1]='G'))then
+          BEGIN
+          //allfloor[x][y].Enabled:= true;
+          allfloor[x][y].Picture.LoadFromFile('terrain/G.png');
+          //allfloor[x][y].Enabled:= false;
+          END
+      ELSE
+      if  ((allfloormap[x+1][y]='W')and(allfloormap[x-1][y]='S')and(allfloormap[x][y+1]='W'))or  //R
+          ((allfloormap[x+1][y]='S')and(allfloormap[x-1][y]='W')and(allfloormap[x][y+1]='W'))or  //B
+          ((allfloormap[x+1][y]='W')and(allfloormap[x-1][y]='W')and(allfloormap[x][y+1]='S'))or  //B
+          ((allfloormap[x+1][y]='W')and(allfloormap[x-1][y]='W')and(allfloormap[x][y+1]='W'))then
+          BEGIN
+          //allfloor[x][y].Enabled:= true;
+          allfloor[x][y].Picture.LoadFromFile('terrain/w.png');
+          //allfloor[x][y].Enabled:= false;
+          END
+      end;
+
+    label1.Caption:=i.ToString+#9+x.ToString+#9+y.ToString;
+    end;
+    label1.Caption:=x.ToString;
+  end;
+ //showmessage('next loop');
+end;
+
+end;
+
+procedure TForm1.tilehomefloor;
+var x,y , divfactor : integer;
+begin
+divfactor:=32;
+
+Setlength(allfloor,round(form1.width/divfactor));
+Setlength(allfloormap2,round(form1.width/divfactor));
+
+
+for X := 1 to round(form1.Width/divfactor-2) do
+  begin
+  Setlength(allfloor[x],round(form1.HEIGHT/divfactor));
+  Setlength(allfloormap2[x],round(form1.HEIGHT/divfactor));
+    for Y := 1 to round(form1.HEIGHT/divfactor-2) do
+    begin
+    //if randomrange(1,5)=2 then
+      begin
+      allfloor[x][y] := TImage.Create(Self);
+      allfloor[x][y].Height:=32;
+      allfloor[x][y].width :=32;
+      if (X =1)and (y =1) then allfloormap2[x][y]:= 'RB'
+      else
+      if (X =1) and allfloormap2[x][y-1].Contains('B')  then
+      begin
+       case randomrange(1,4) of
+       1:allfloormap2[x][y]:='TR';
+
+       2:allfloormap2[x][y]:='TB';
+       3:allfloormap2[x][y]:='T'
+       end;
+      end
+      else
+      if (X =1) and  (Not allfloormap2[x][y-1].Contains('B'))  then
+      begin
+       case randomrange(1,4) of
+       1:allfloormap2[x][y]:='N';
+       2:allfloormap2[x][y]:='RB';
+       3:allfloormap2[x][y]:='R'
+       end;
+      end
+      else
+      if (Y =1) and allfloormap2[x-1][y].Contains('R')  then
+      begin
+       case randomrange(1,4) of
+
+       1:allfloormap2[x][y]:='L';
+       2:allfloormap2[x][y]:='BL';
+       3:allfloormap2[x][y]:='RL'
+       end;
+      end
+      else
+      if (Y =1) and (Not allfloormap2[x-1][y].Contains('R'))  then
+      begin
+       case randomrange(1,5) of
+
+       1:allfloormap2[x][y]:='R';
+       2:allfloormap2[x][y]:='B';
+       3:allfloormap2[x][y]:='RB';
+       4:allfloormap2[x][y]:='N';
+       end;
+      end
+      else
+      if (allfloormap2[x-1][y].Contains('R')) and (allfloormap2[x][y-1].Contains('B'))  then
+      begin
+       case randomrange(1,5) of
+       1:allfloormap2[x][y]:='TL';
+       2:allfloormap2[x][y]:='TLB';
+       3:allfloormap2[x][y]:='TRL';
+       4:allfloormap2[x][y]:='TBR';
+       5:allfloormap2[x][y]:='TRBL';
+       end;
+      end
+      else
+      if (allfloormap2[x-1][y].Contains('R')) and (not allfloormap2[x][y-1].Contains('B'))  then
+      begin
+       case randomrange(1,5) of
+       1:allfloormap2[x][y]:='L';
+       2:allfloormap2[x][y]:='BL';
+       3:allfloormap2[x][y]:='RL';
+       4:allfloormap2[x][y]:='BLR';
+       end;
+      end
+      else
+      if (Not allfloormap2[x-1][y].Contains('R')) and (allfloormap2[x][y-1].Contains('B'))  then
+      begin
+       case randomrange(1,5) of
+       1:allfloormap2[x][y]:='T';
+       2:allfloormap2[x][y]:='TB';
+       3:allfloormap2[x][y]:='TBR';
+       4:allfloormap2[x][y]:='TR';
+       end;
+      end
+      else
+        if allfloormap2[x-1][y].Contains('N') and allfloormap2[x][y-1].Contains('N')  then
+      begin
+       case randomrange(1,8) of
+       1:allfloormap2[x][y]:='TRBL';
+
+       2..7:allfloormap2[x][y]:='N';
+       end;
+      end
+      else
+      begin
+      //memolog(allfloormap[x-1][y]+#9+allfloormap[x][y-1]);
+      allfloormap2[x][y]:='N';
+      end;
+
+
+
+      allfloor[x][y].Picture.LoadFromFile('ground/'+allfloormap2[x][y]+'.png');
+
+
+      allfloor[x][y].Width:=divfactor;
+      allfloor[x][y].height:=divfactor;
+      allfloor[x][y].Stretch:=true;
+      allfloor[x][y].top:=y*divfactor;
+      allfloor[x][y].left:=x*divfactor;
+      allfloor[x][y].Parent:= form1;
+      allfloor[x][y].SendToBack;
+      form1.Repaint;
+      end;
+    end;
+  end;
+
+end;
+end.
